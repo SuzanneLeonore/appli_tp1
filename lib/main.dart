@@ -224,23 +224,39 @@ class FavoritesPage extends StatelessWidget {
 }
 
 class PainterPage extends StatelessWidget {
-  final String query = """
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+
+    );
+  }
+}
+class MuseumsPage extends StatelessWidget{
+  final String query = '''
     query {
-      getPeintres {
-        id
-        nom
-        nationalite
+      taxonomyTermQuery(
+        filter: {conditions: [{field: "vid", value: "musee"}]}
+        limit: 10
+      ) {
+        entities {
+          entityLabel
+          fieldMuseeLogo { url }
+          fieldAdresse {
+            locality
+            addressLine1
+          }
+        }
       }
     }
-  """;
+  ''';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Liste des Peintres")),
+      appBar: AppBar(title: Text("Liste des Musées")),
       body: Query(
         options: QueryOptions(document: gql(query)),
-        builder: (QueryResult result, {VoidCallback? refetch, FetchMore? fetchMore}) {
+        builder: (result, {refetch, fetchMore}) {
           if (result.isLoading) {
             return Center(child: CircularProgressIndicator());
           }
@@ -248,28 +264,31 @@ class PainterPage extends StatelessWidget {
             return Center(child: Text("Erreur: ${result.exception.toString()}"));
           }
 
-          // Récupérer la liste des peintres
-          List peintres = result.data?["getPeintres"] ?? [];
+          final museums = result.data?['taxonomyTermQuery']['entities'];
+          if (museums == null || museums.isEmpty) {
+            return Center(child: Text("Aucun musée trouvé."));
+          }
 
           return ListView.builder(
-            itemCount: peintres.length,
+            itemCount: museums.length,
             itemBuilder: (context, index) {
-              var peintre = peintres[index];
+              final museum = museums[index];
+              final logoUrl = museum['fieldMuseeLogo']?.first['url'];
+              final name = museum['entityLabel'];
+              final address = museum['fieldAdresse']['addressLine1'] ?? 'Adresse inconnue';
+              final city = museum['fieldAdresse']['locality'] ?? 'Ville inconnue';
+
               return ListTile(
-                title: Text(peintre["nom"]),
-                subtitle: Text(peintre["nationalite"]),
+                leading: logoUrl != null
+                    ? Image.network(logoUrl, width: 50, height: 50, fit: BoxFit.cover)
+                    : Icon(Icons.museum),
+                title: Text(name),
+                subtitle: Text('$address, $city'),
               );
             },
           );
         },
       ),
     );
-  }
-}
-class MuseumsPage extends StatelessWidget{
-   @override
-  Widget build(BuildContext context) {
-    return Scaffold();
-    
   }
 }
