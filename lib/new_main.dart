@@ -2,8 +2,10 @@ import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_builder/responsive_builder.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'pages/oeuvres_page.dart';
+import 'pages/musees_page.dart';
+import 'pages/artistes_page.dart';
+import 'pages/favoris_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -19,7 +21,7 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => MyAppState(),
       child: MaterialApp(
-        title: 'Namer App',
+        title: 'Art_log',
         theme: ThemeData(
           useMaterial3: true,
           colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 1, 45, 116)),
@@ -58,10 +60,10 @@ class _MyHomePageState extends State<MyHomePage> {
   
 
   final List<Widget> pages = [
-    GeneratorPage(),
-    FavoritesPage(),
-    PainterPage(),
-    MuseumsPage(),
+    OeuvrePage(),
+    FavorisPage(),
+    ArtistesPage(),
+    MuseesPage(),
   ];
 
   @override
@@ -90,7 +92,7 @@ class _MyHomePageState extends State<MyHomePage> {
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.brush), label: "Accueil", backgroundColor: Color.fromARGB(255, 2, 65, 116)),
           BottomNavigationBarItem(icon: Icon(Icons.favorite), label: "Favoris", backgroundColor: Color.fromARGB(255, 2, 65, 116)),
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Peintres", backgroundColor: Color.fromARGB(255, 2, 65, 116)),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Artistes", backgroundColor: Color.fromARGB(255, 2, 65, 116)),
           BottomNavigationBarItem(icon: Icon(Icons.museum), label: "Musées", backgroundColor: Color.fromARGB(255, 2, 65, 116)),
         ],
       ),
@@ -112,7 +114,7 @@ class _MyHomePageState extends State<MyHomePage> {
               destinations: [
                 NavigationRailDestination(icon: Icon(Icons.brush), label: Text('Accueil')),
                 NavigationRailDestination(icon: Icon(Icons.favorite), label: Text('Favoris')),
-                NavigationRailDestination(icon: Icon(Icons.home), label: Text('Peintres')),
+                NavigationRailDestination(icon: Icon(Icons.home), label: Text('Artistes')),
                 NavigationRailDestination(icon: Icon(Icons.museum), label: Text('Musées')),
               ],
             ),
@@ -143,7 +145,7 @@ class _MyHomePageState extends State<MyHomePage> {
               destinations: [
                 NavigationRailDestination(icon: Icon(Icons.brush), label: Text('Accueil')),
                 NavigationRailDestination(icon: Icon(Icons.favorite), label: Text('Favoris')),
-                NavigationRailDestination(icon: Icon(Icons.home), label: Text('Peintres')),
+                NavigationRailDestination(icon: Icon(Icons.home), label: Text('Artistes')),
                 NavigationRailDestination(icon: Icon(Icons.museum), label: Text('Musées')),
               ],
             ),
@@ -160,70 +162,44 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-class GeneratorPage extends StatelessWidget {
-
-  List artworks = [];
-   Future<void> fetchArtworks() async {
-    final response = await http.get(Uri.parse('http://localhost:8080'));
-    if (response.statusCode == 200) {
-      setState(() {
-        artworks = jsonDecode(response.body);
-      });
-    } else {
-      throw Exception('Échec du chargement des œuvres');
-    }
-  }
+class OeuvrePage extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Art Collections')),
-      body: ListView.builder(
-        itemCount: artworks.length,
-        itemBuilder: (context, index) {
-          var art = artworks[index];
-          return ListTile(
-            leading: Image.network(
-              art['image_url'] ?? 'https://via.placeholder.com/150',
-              width: 50,
-              height: 50,
-              fit: BoxFit.cover,
-            ),
-            title: Text(art['title']),
-            subtitle: Text('${art['artist']} (${art['year'] ?? 'Inconnu'})'),
-          );
-        },
-      ),
+      appBar: AppBar(title: Text("Accueil")),
+      body: Center(child: Text('Page des oeuvres')),
     );
   }
 }
 
-
-// class des 4 pages
-
-class FavoritesPage extends StatelessWidget {
+class FavorisPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
+      appBar: AppBar(title: Text("Favoris")),
+      body: Center(child: Text('Page des favoris')),
     );
   }
 }
 
-class PainterPage extends StatelessWidget {
+class ArtistesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
+      appBar: AppBar(title: Text("Artistes")),
+      body: Center(child: Text('Page des artistes')),
     );
   }
 }
-class MuseumsPage extends StatelessWidget{
+
+class MuseesPage extends StatelessWidget{
 
  @override
   Widget build(BuildContext context) {
     return Scaffold(
-
+      appBar: AppBar(title: Text("Musées")),
+      body: Center(child: Text('Page des Musées')),
     );
   }
 }
