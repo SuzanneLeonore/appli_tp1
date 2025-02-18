@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '/bdd_Init.dart';
+import '/Type_donnee/artiste.dart';
 
 class ArtistesPage extends StatefulWidget {
   const ArtistesPage({super.key});
@@ -9,21 +10,21 @@ class ArtistesPage extends StatefulWidget {
 }
 
 class _ArtistesPageState extends State<ArtistesPage> {
-  late Future<List<Map<String, dynamic>>> _artistes;
+  late Future<List<Artistes>> _artistes;
 
   @override
   void initState() {
     super.initState();
-    _artistes = DatabaseHelper.instance.getAllProduits();
+    _artistes = DatabaseHelper.instance.getAllArtistes();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Catalogue des Produits'),
+        title: const Text('Catalogue des artistes'),
       ),
-      body: FutureBuilder<List<Map<String, dynamic>>>(
+      body: FutureBuilder<List<Artistes>>(
         future: _artistes,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -31,21 +32,21 @@ class _ArtistesPageState extends State<ArtistesPage> {
           } else if (snapshot.hasError) {
             return Center(child: Text('Erreur : ${snapshot.error}'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('Aucun produit trouvé.'));
+            return const Center(child: Text('Aucun artiste trouvé.'));
           }
 
-          final produits = snapshot.data!;
+          final artistes = snapshot.data!;
           return ListView.builder(
-            itemCount: produits.length,
+            itemCount: artistes.length,
             itemBuilder: (context, index) {
-              final produit = produits[index];
+              final artiste = artistes[index];
               return Card(
                 margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 child: ListTile(
-                  title: Text(produit['nom'], style: const TextStyle(fontWeight: FontWeight.bold)),
-                  subtitle: Text(produit['description']),
+                  title: Text(artiste.nom, style: const TextStyle(fontWeight: FontWeight.bold)),
+                  subtitle: Text(artiste.description),
                   trailing: Text(
-                    '${produit['prix'].toStringAsFixed(2)} €',
+                    '${artiste.prix.toStringAsFixed(2)} €',
                     style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.green),
                   ),
                 ),
