@@ -1,3 +1,4 @@
+// lib/pages/musees_page.dart
 import 'package:flutter/material.dart';
 import '/bdd_Init.dart';
 import '/Type_donnee/musee.dart';

@@ -1,9 +1,9 @@
+// lib/pages/oeuvres_page.dart
 import 'package:flutter/material.dart';
 import '/bdd_Init.dart';
 import '/Type_donnee/oeuvre.dart';
 
 class OeuvrePage extends StatefulWidget {
-  const OeuvrePage({super.key});
 
   @override
   State<OeuvrePage> createState() => _OeuvrePageState();
@@ -16,6 +16,11 @@ class _OeuvrePageState extends State<OeuvrePage> {
   void initState() {
     super.initState();
     _oeuvres = DatabaseHelper.instance.getAllOeuvres();
+    _oeuvres.then((oeuvres) {
+    print("Oeuvres récupérées: $oeuvres");
+    }).catchError((e) {
+      print("Erreur lors de la récupération des œuvres: $e");
+    });
   }
 
   @override

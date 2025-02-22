@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'pages/oeuvres_page.dart';
-import 'pages/musees_page.dart';
-import 'pages/artistes_page.dart';
 import 'pages/favoris_page.dart';
+import 'pages/artistes_page.dart';
+import 'pages/musees_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -15,7 +15,6 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  @override
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
@@ -57,7 +56,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   var selectedIndex = 0; // Déclare selectedIndex au niveau de la classe
-  
+
 
   final List<Widget> pages = [
     OeuvrePage(),
@@ -77,7 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget smallScreenLayout() {
     return Scaffold(
-      appBar: AppBar(title: Text("Stateful Bottom Bar")),
+      appBar: AppBar(title: Text("Art_Logue")),
       body: pages[selectedIndex], // Affiche la page sélectionnée
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.shifting,
@@ -161,7 +160,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
-
+/*
 class OeuvrePage extends StatelessWidget {
   
   @override
@@ -203,3 +202,4 @@ class MuseesPage extends StatelessWidget{
     );
   }
 }
+*/
