@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '/bdd_Init.dart';
 import '/Type_donnee/artiste.dart';
 
+
 class ArtistesPage extends StatefulWidget {
   const ArtistesPage({super.key});
 

@@ -6,14 +6,34 @@ import 'pages/oeuvres_page.dart';
 import 'pages/favoris_page.dart';
 import 'pages/artistes_page.dart';
 import 'pages/musees_page.dart';
+import 'package:path/path.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
 
-void main() {
-  runApp(MyApp());
+Future <void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final Future<Database> database = openDatabase(
+    join(await getDatabasesPath(), 'catalogue.db'),
+      onCreate: (db, version) {
+      // Run the CREATE TABLE statement on the database.
+      return db.execute(
+        'CREATE TABLE oeuvres(id INTEGER PRIMARY KEY, nom TEXT, description TEXT, prix INT)',
+      );
+    },
+    version: 1,
+  );
+  runApp(MyApp(
+    database: database,
+  ));
 }
 
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final Future<Database> database;
+  const MyApp({
+    Key? key, 
+    required this.database
+  }): super (key: key);
 
   @override
   Widget build(BuildContext context) {

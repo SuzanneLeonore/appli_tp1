@@ -28,4 +28,9 @@ class Artistes {
       'prix': prix,
     };
   }
+
+  @override
+  String toString() {
+    return 'Dog{id: $id, name: $nom, age: $description, prix: $prix}';
+  }
 }

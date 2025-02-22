@@ -1,8 +1,8 @@
 import 'dart:io'; 
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:path/path.dart';
+import 'dart:async';
 import 'package:flutter/services.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
 import 'Type_donnee/oeuvre.dart';
@@ -33,7 +33,7 @@ class DatabaseHelper {
       databaseFactory = databaseFactoryFfi; // Utilisation sur desktop
     }
 
-    // définition chemin de la base de données
+    // Définir le chemin de la base de données
     String path;
     if (kIsWeb) {
       path = 'catalogue.db';  // Sur le web, fichier 
@@ -41,7 +41,6 @@ class DatabaseHelper {
       path = join(await getDatabasesPath(), 'catalogue.db'); // Sur les plateformes locales
     }
 
-    //path = join(await getDatabasesPath(), 'catalogue.db');
     print("Chemin complet de la base de données : $path");
 
     try {
@@ -53,43 +52,57 @@ class DatabaseHelper {
         print("La base de données n'existe pas");
         print("Création bdd");
 
-        ByteData data = await rootBundle.load('assets/catalogue.sql');
-        String sql = String.fromCharCodes(data.buffer.asUint8List());
-        print(" Contenu du fichier SQL : $sql");
+        // Chargement du fichier SQL
+        try {
+          ByteData data = await rootBundle.load('assets/catalogue.sql');
+          String sql = String.fromCharCodes(data.buffer.asUint8List());
+          print("Contenu du fichier SQL chargé : $sql");
+          
+          if (sql.isEmpty) {
+            print("Le fichier SQL est vide ou n'a pas pu être chargé correctement.");
+          }
+          
+          // Créer la base de données avec openDatabase
+          Database db = await openDatabase(path, version: 1, onCreate: (db, version) async {
+            print("Exécution des commandes SQL");
 
-        // Créer la base de données avec openDatabase
-        Database db = await openDatabase(path, version: 1, onCreate: (db, version) async {
-          print("Exécution des commandes SQL");
-          List<String> queries = sql.split(';');
-          for (var query in queries) {
-            if (query.trim().isNotEmpty) {
-              try {
-                await db.execute(query);
-                print("Commande SQL exécutée : $query");
-              } catch (e) {
-                print("Erreur lors de l'exécution de la commande SQL : $e");
+            // Décomposer les requêtes SQL
+            List<String> queries = sql.split(';');
+            for (var query in queries) {
+              if (query.trim().isNotEmpty) {
+                try {
+                  print("Exécution de la commande SQL : $query");
+                  await db.execute(query);
+                  print("Commande SQL exécutée : $query");
+                } catch (e) {
+                  print("Erreur lors de l'exécution de la commande SQL : $e");
+                }
               }
             }
-          }
-        });
+          });
 
-        print('Base de données créée et initialisée.');
-        return db;
+          print('Base de données créée et initialisée.');
+          return db;
+        } catch (e) {
+          print("Erreur lors du chargement du fichier SQL : $e");
+          rethrow;
+        }
       }
 
       // Si la base de données existe déjà, on l'ouvre simplement
       print('Base de données déjà existante.');
       return await openDatabase(path);
     } catch (e) {
-      print("Erreur lors de la vérification de l'existence de la base de données : $e");
+      print("Erreur lors de l'initialisation de la base de données : $e");
       rethrow;
     }
   }
 
 
+
   Future<List<Oeuvre>> getProduits() async {
     final db = await database;
-    final List<Map<String, dynamic>> maps = await db.query('oeuvre');
+    final List<Map<String, dynamic>> maps = await db.query('oeuvres');
     return maps.map((map) => Oeuvre.fromMap(map)).toList(); 
   }
 
@@ -113,7 +126,7 @@ class DatabaseHelper {
 
   Future<List<Musees>> getAllMusees() async {
     final db = await database;
-    final List<Map<String, dynamic>> maps = await db.query('musees');
+    final List<Map<String, dynamic>> maps = await db.query('musées');
 
     // Convertir la liste de Map en liste de Produits
     return maps.map((map) => Musees.fromMap(map)).toList();
@@ -123,7 +136,7 @@ class DatabaseHelper {
     final db = await database;
     Oeuvre oeuvre = Oeuvre(nom: nom, description: description, prix: prix);
     return await db.insert(
-      'oeuvre',
+      'oeuvres',
       oeuvre.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
@@ -133,7 +146,7 @@ class DatabaseHelper {
     final db = await database;
     Artistes artiste = Artistes(nom: nom, description: description, prix: prix);
     return await db.insert(
-      'artiste',
+      'artistes',
       artiste.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
@@ -143,7 +156,7 @@ class DatabaseHelper {
     final db = await database;
     Musees musee = Musees(nom: nom, description: description, prix: prix);
     return await db.insert(
-      'musée',
+      'musées',
       musee.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );

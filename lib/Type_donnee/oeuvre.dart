@@ -29,4 +29,6 @@ class Oeuvre {
       'prix': prix,
     };
   }
+
 }
+

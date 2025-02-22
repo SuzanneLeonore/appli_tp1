@@ -1,14 +1,28 @@
-CREATE TABLE Oeuvre (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  nom TEXT NOT NULL,
-  description TEXT NOT NULL,
-  prix REAL NOT NULL,         
-  date INT NOT NULL,
-  auteur TEXT NOT NULL
+CREATE TABLE oeuvres (
+  id INTEGER PRIMARY KEY,
+  nom TEXT,
+  description TEXT,
+  prix REAL,
+  date INTEGER,
+  auteur TEXT
+);
+
+CREATE TABLE artistes (
+  id INTEGER PRIMARY KEY,
+  nom TEXT,
+  description TEXT,
+  prix REAL
+);
+
+CREATE TABLE musées (
+  id INTEGER PRIMARY KEY,
+  nom TEXT,
+  description TEXT,
+  prix REAL
 );
 
 
-INSERT INTO Oeuvre (nom, description, prix, date, auteur)   
+INSERT INTO oeuvres (nom, description, prix, date, auteur)   
 VALUES
 ('Produit A', 'Description du produit A', 19.99, 2023, 'auteur'),
 ('Produit B', 'Description du produit B', 29.99, 2023, 'auteur'),
