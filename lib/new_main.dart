@@ -1,5 +1,6 @@
 import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'pages/oeuvres_page.dart';
@@ -9,32 +10,19 @@ import 'pages/musees_page.dart';
 import 'package:path/path.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
+import 'package:appli_tp1/bdd_Init.dart';
 
-Future <void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  final Future<Database> database = openDatabase(
-    join(await getDatabasesPath(), 'catalogue.db'),
-      onCreate: (db, version) {
-      // Run the CREATE TABLE statement on the database.
-      return db.execute(
-        'CREATE TABLE oeuvres(id INTEGER PRIMARY KEY, nom TEXT, description TEXT, prix INT)',
-      );
-    },
-    version: 1,
-  );
-  runApp(MyApp(
-    database: database,
-  ));
+void main() async {
+  print("App démarrée");
+  WidgetsFlutterBinding.ensureInitialized(); 
+  runApp( const MyApp() );
 }
 
 
 class MyApp extends StatelessWidget {
-  final Future<Database> database;
-  const MyApp({
-    Key? key, 
-    required this.database
-  }): super (key: key);
+  const MyApp({super.key});
 
+  
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
@@ -45,7 +33,7 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
           colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 1, 45, 116)),
         ),
-        home: MyHomePage(),
+        home: HomePage(),
       ),
     );
   }
@@ -66,17 +54,17 @@ class MyAppState extends ChangeNotifier {
   }
 }
 
+class HomePage extends StatefulWidget{
+  const HomePage({super.key});
 
-
-
-class MyHomePage extends StatefulWidget {
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<HomePage>createState() =>_HomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  var selectedIndex = 0; // Déclare selectedIndex au niveau de la classe
-
+class _HomePageState extends State<HomePage>{
+  late Future<void> _initDatabaseFuture;
+  var selectedIndex = 0; 
+  
 
   final List<Widget> pages = [
     OeuvrePage(),
@@ -86,13 +74,39 @@ class _MyHomePageState extends State<MyHomePage> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    _initDatabaseFuture = DatabaseHelper.instance.init();
+  }
+
+
+  
+  @override
   Widget build(BuildContext context) {
-    return ScreenTypeLayout(
-      mobile: smallScreenLayout(),
-      tablet: largeScreenLayout(),
-      desktop: largeScreenLayout(),
+    return FutureBuilder(
+      future: _initDatabaseFuture,  
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Scaffold(
+            appBar: AppBar(title: Text("Art_Logue")),
+            body: Center(child: CircularProgressIndicator()),  // Attente de la DB
+          );
+        } else if (snapshot.hasError) {
+          return Scaffold(
+            appBar: AppBar(title: Text("Art_Logue")),
+            body: Center(child: Text('Erreur : ${snapshot.error}')),
+          );
+        } else {
+          return ScreenTypeLayout(
+            mobile: smallScreenLayout(),
+            tablet: largeScreenLayout(context),
+            desktop: largeScreenLayout(context),
+          );
+        }
+      },
     );
   }
+
 
   Widget smallScreenLayout() {
     return Scaffold(
@@ -118,7 +132,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Widget largeScreenLayout() {
+  Widget largeScreenLayout(context) {
     return Scaffold(
       body: Row(
         children: [
@@ -149,7 +163,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Widget desktopLayout() {
+  Widget desktopLayout(context) {
     return Scaffold(
       body: Row(
         children: [
@@ -180,46 +194,3 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
-/*
-class OeuvrePage extends StatelessWidget {
-  
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text("Accueil")),
-      body: Center(child: Text('Page des oeuvres')),
-    );
-  }
-}
-
-class FavorisPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text("Favoris")),
-      body: Center(child: Text('Page des favoris')),
-    );
-  }
-}
-
-class ArtistesPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text("Artistes")),
-      body: Center(child: Text('Page des artistes')),
-    );
-  }
-}
-
-class MuseesPage extends StatelessWidget{
-
- @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text("Musées")),
-      body: Center(child: Text('Page des Musées')),
-    );
-  }
-}
-*/

@@ -1,31 +1,32 @@
-class Musees {
-  final int? id;
-  final String nom;
-  final String description;
-  final double prix;
-
-  Musees({
-    this.id,
+class Musee {
+  final String logo;      
+  final String nom;       
+  final String dateCreation; 
+  final String adresse;   
+  
+  Musee({
+    required this.logo,
     required this.nom,
-    required this.description,
-    required this.prix,
+    required this.dateCreation,
+    required this.adresse,
   });
 
-  factory Musees.fromMap(Map<String, dynamic> map) {
-    return Musees(
-      id: map['id'],
+  factory Musee.fromMap(Map<String, dynamic> map) {
+    return Musee(
+      logo: map['logo'],
       nom: map['nom'],
-      description: map['description'],
-      prix: map['prix'],
+      dateCreation: map['dateCreation'],
+      adresse: map['adresse'],
     );
   }
 
+  // Fonction pour convertir une instance de Musee en map
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
+      'logo': logo,
       'nom': nom,
-      'description': description,
-      'prix': prix,
+      'dateCreation': dateCreation,
+      'adresse': adresse,
     };
   }
 }

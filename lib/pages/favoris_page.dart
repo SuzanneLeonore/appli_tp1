@@ -1,7 +1,7 @@
-// lib/pages/Favoris_page.dart
 import 'package:flutter/material.dart';
 import '/bdd_Init.dart';
-import '/Type_donnee/artiste.dart';
+import '/Type_donnee/artiste.dart'; 
+
 
 class FavorisPage extends StatefulWidget {
   const FavorisPage({super.key});
@@ -11,22 +11,23 @@ class FavorisPage extends StatefulWidget {
 }
 
 class _FavorisPageState extends State<FavorisPage> {
-  late Future<List<Artistes>> _Artistes;
+  late Future<List<Artistes>> _artistes;
+  //final DatabaseHelper _databaseHelper = DatabaseHelper.instance;
 
   @override
   void initState() {
     super.initState();
-    _Artistes = DatabaseHelper.instance.getAllArtistes();
+    _artistes = DatabaseHelper.instance.getArtistes(); 
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Catalogue des Artistes'),
+        title: const Text('Catalogue des artistes'),
       ),
       body: FutureBuilder<List<Artistes>>(
-        future: _Artistes,
+        future: _artistes,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -36,19 +37,37 @@ class _FavorisPageState extends State<FavorisPage> {
             return const Center(child: Text('Aucun artiste trouvé.'));
           }
 
-          final Favoris = snapshot.data!;
+          final artistes = snapshot.data!;
           return ListView.builder(
-            itemCount: Favoris.length,
+            itemCount: artistes.length,
             itemBuilder: (context, index) {
-              final artiste = Favoris[index];
+              final artiste = artistes[index];
               return Card(
                 margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 child: ListTile(
+                  contentPadding: const EdgeInsets.all(10),
+                  leading: CircleAvatar(
+                    backgroundImage: NetworkImage(artiste.photo), 
+                    radius: 30,
+                  ),
                   title: Text(artiste.nom, style: const TextStyle(fontWeight: FontWeight.bold)),
-                  subtitle: Text(artiste.description),
-                  trailing: Text(
-                    '${artiste.prix.toStringAsFixed(2)} €',
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.green),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Naissance : ${artiste.dateNaissance}', 
+                        style: const TextStyle(fontSize: 14),
+                      ),
+                      if (artiste.dateDeces != null)
+                        Text(
+                          'Décès : ${artiste.dateDeces}', 
+                          style: const TextStyle(fontSize: 14),
+                        ),
+                      Text(
+                        'Style : ${artiste.styleArt}', 
+                        style: const TextStyle(fontSize: 14, fontStyle: FontStyle.italic),
+                      ),
+                    ],
                   ),
                 ),
               );

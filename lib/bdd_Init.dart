@@ -1,5 +1,7 @@
 import 'dart:io'; 
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:path/path.dart';
 import 'dart:async';
 import 'package:flutter/services.dart';
@@ -9,12 +11,168 @@ import 'Type_donnee/oeuvre.dart';
 import 'Type_donnee/artiste.dart';
 import 'Type_donnee/musee.dart';
 
+Future<void> initDatabaseFactory() async {
+  if (kIsWeb) {
+    databaseFactory = databaseFactoryFfiWeb; // pour le web
+  } else if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+    sqfliteFfiInit(); // initialisation pour le desktop
+    databaseFactory = databaseFactoryFfi;
+  }
+}
+
 
 class DatabaseHelper {
   static Database? _database;
-  static final DatabaseHelper instance = DatabaseHelper._internal();
+  static final DatabaseHelper instance = DatabaseHelper._constructor();
 
-  DatabaseHelper._internal();
+  DatabaseHelper._constructor();
+
+  Future<void> init() async {
+    if (_database != null) return; 
+    print("💬 Initialisation de la base de données...");
+    await initDatabaseFactory();
+    _database = await getDatabase(); 
+  }
+
+  Future<Database> get database async {
+    if (_database == null) {
+      await init(); 
+    }
+    return _database!;
+  }
+
+  Future<Database> getDatabase() async {
+    try {
+      print("➡️ Début de l'initialisation de la base de données...");
+      final databasePath = kIsWeb ? 'catalogue.db' : join(await getDatabasesPath(), 'catalogue.db');
+      print("📦 Chemin de la base de données : $databasePath");
+      
+      final db = await openDatabase(databasePath, version: 1, onCreate: (db, version) async {
+        print("✅ BDD créée (sans exécuter le fichier SQL)");
+      });
+      print("✅ Base de données ouverte avec succès !");
+      await _loadSqlFromAssetsAndExecute(db);
+      return db;
+    } catch (e) {
+      print("❌ Erreur lors de l'initialisation de la base de données : $e");
+      rethrow;
+    }
+  }
+
+  Future<void> _loadSqlFromAssetsAndExecute(Database db) async {
+    try {
+      // Charger le fichier SQL depuis les assets
+      String sql = await _loadSqlFromAsset('assets/catalogue.sql');
+      print("📄 SQL chargé : $sql");
+
+      // Diviser le fichier SQL en instructions séparées
+      List<String> statements = sql.split(';');
+
+      // Exécuter chaque instruction SQL
+      for (var statement in statements) {
+        if (statement.trim().isNotEmpty) {
+          try {
+            await db.execute(statement.trim());
+            print("✅ Exécution de la requête SQL : $statement");
+          } catch (e) {
+            print("❌ Erreur lors de l'exécution de la requête SQL : $e");
+          }
+        }
+      }
+
+    } catch (e) {
+      print("❌ Erreur lors du chargement du fichier SQL : $e");
+      rethrow;
+    }
+  }
+
+  // Charger le contenu d'un fichier SQL depuis les assets
+  Future<String> _loadSqlFromAsset(String assetPath) async {
+    try {
+      final byteData = await rootBundle.load(assetPath);
+      final sql = String.fromCharCodes(byteData.buffer.asUint8List());
+      return sql;
+    } catch (e) {
+      print("❌ Erreur lors du chargement du fichier SQL depuis les assets : $e");
+      rethrow;
+    }
+  }
+
+
+
+
+  void addTask(String content) async{
+    final db = await database;
+    await db.insert(
+      'oeuvres',
+      {
+        'text': content,
+        'taille':0, 
+      },
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  Future<List<Oeuvre>> getOeuvres() async {
+      final db = await database;
+      final data = await db.query('oeuvres');
+      List<Oeuvre> oeuvres= data.map((e)=> Oeuvre(
+        photo : e["photo"] as String,
+        nom: e["nom"] as String, 
+        dateCreation : e["dateCreation"] as String, 
+        auteur: e["auteur"] as String,
+        musee : e["musee"] as String,
+      ),
+      )
+      .toList();
+      //final List<Map<String, dynamic>> maps = await db.query('oeuvres');
+      //return maps.map((map) => Oeuvre.fromMap(map)).toList(); 
+  return oeuvres;
+  }
+
+  Future<List<Artistes>> getArtistes() async {
+      final db = await database;
+      final data = await db.query('artistes');
+      List<Artistes> artistes= data.map((e)=> Artistes(
+        photo : e["photo"] as String,
+        nom: e["nom"] as String, 
+        dateNaissance : e["dateNaissance"] as String, 
+        dateDeces : e["dateDeces"] as String, 
+        styleArt: e["styleArt"] as String,
+      ),
+      )
+      .toList();
+      //final List<Map<String, dynamic>> maps = await db.query('oeuvres');
+      //return maps.map((map) => Oeuvre.fromMap(map)).toList(); 
+  return artistes;
+  }
+
+  Future<List<Musee>> getMusees() async {
+      final db = await database;
+      final data = await db.query('musees');
+      List<Musee> musees= data.map((e)=> Musee(
+        logo : e["logo"] as String,
+        nom: e["nom"] as String, 
+        dateCreation : e["dateCreation"] as String, 
+        adresse: e["adresse"] as String, 
+      ),
+      )
+      .toList();
+      //final List<Map<String, dynamic>> maps = await db.query('oeuvres');
+      //return maps.map((map) => Oeuvre.fromMap(map)).toList(); 
+  return musees;
+  }
+
+  
+
+}
+
+/*
+class DatabaseHelper {
+  static Database? _database;
+  static final DatabaseHelper instance = DatabaseHelper._constructor();
+
+  DatabaseHelper._constructor();
 
   Future<Database> get database async {
     if (_database != null) return _database!;
@@ -162,3 +320,4 @@ class DatabaseHelper {
     );
   }
 }
+*/
