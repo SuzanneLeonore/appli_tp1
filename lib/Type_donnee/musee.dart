@@ -2,13 +2,15 @@ class Musee {
   final String logo;      
   final String nom;       
   final String dateCreation; 
-  final String adresse;   
+  final String adresse;
+  bool isFavorite;   
   
   Musee({
     required this.logo,
     required this.nom,
     required this.dateCreation,
     required this.adresse,
+    this.isFavorite = false,
   });
 
   factory Musee.fromMap(Map<String, dynamic> map) {

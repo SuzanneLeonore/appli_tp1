@@ -1,78 +1,45 @@
+import 'package:appli_tp1/Type_donnee/artiste.dart';
 import 'package:flutter/material.dart';
-import '/bdd_Init.dart';
-import '/Type_donnee/artiste.dart'; 
+import '/Type_donnee/musee.dart'; 
+import '/Type_donnee/oeuvre.dart';
+import 'favorisController.dart';
 
 
-class FavorisPage extends StatefulWidget {
+class FavorisPage extends StatelessWidget {
   const FavorisPage({super.key});
 
-  @override
-  State<FavorisPage> createState() => _FavorisPageState();
-}
 
-class _FavorisPageState extends State<FavorisPage> {
-  late Future<List<Artistes>> _artistes;
-  //final DatabaseHelper _databaseHelper = DatabaseHelper.instance;
-
-  @override
-  void initState() {
-    super.initState();
-    _artistes = DatabaseHelper.instance.getArtistes(); 
-  }
-
-  @override
+   @override
   Widget build(BuildContext context) {
+
+    List<dynamic> favoris = FavorisController.getFavorites();
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Catalogue des artistes'),
+        title: Text("Favoris"),
       ),
-      body: FutureBuilder<List<Artistes>>(
-        future: _artistes,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Erreur : ${snapshot.error}'));
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('Aucun artiste trouvé.'));
+      body: ListView.builder(
+        itemCount: favoris.length,
+        itemBuilder: (context, index) {
+          final item = favoris[index];
+          if (item is Oeuvre) {
+            return ListTile(
+              title: Text(item.nom),
+              subtitle: Text('Auteur: ${item.auteur}'),
+            );
+          } else if (item is Artistes) {
+            return ListTile(
+              title: Text(item.nom),
+              subtitle: Text('Artiste favori'),
+            );
+          } else if (item is Musee) {
+            return ListTile(
+              title: Text(item.nom),
+              subtitle: Text('Musée favori'),
+            );
+          } else {
+            return Container(); // cas type non défini
           }
-
-          final artistes = snapshot.data!;
-          return ListView.builder(
-            itemCount: artistes.length,
-            itemBuilder: (context, index) {
-              final artiste = artistes[index];
-              return Card(
-                margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                child: ListTile(
-                  contentPadding: const EdgeInsets.all(10),
-                  leading: CircleAvatar(
-                    backgroundImage: NetworkImage(artiste.photo), 
-                    radius: 30,
-                  ),
-                  title: Text(artiste.nom, style: const TextStyle(fontWeight: FontWeight.bold)),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Naissance : ${artiste.dateNaissance}', 
-                        style: const TextStyle(fontSize: 14),
-                      ),
-                      if (artiste.dateDeces != null)
-                        Text(
-                          'Décès : ${artiste.dateDeces}', 
-                          style: const TextStyle(fontSize: 14),
-                        ),
-                      Text(
-                        'Style : ${artiste.styleArt}', 
-                        style: const TextStyle(fontSize: 14, fontStyle: FontStyle.italic),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          );
         },
       ),
     );

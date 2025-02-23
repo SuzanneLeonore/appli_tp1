@@ -4,7 +4,8 @@ class Oeuvre {
   final String nom;          
   final String dateCreation; 
   final String auteur;       
-  final String musee;        
+  final String musee; 
+  bool isFavorite;       
 
   Oeuvre({
     this.id,
@@ -13,6 +14,7 @@ class Oeuvre {
     required this.dateCreation,
     required this.auteur,
     required this.musee,
+    this.isFavorite = false,
   });
 
 

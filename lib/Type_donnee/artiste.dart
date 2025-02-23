@@ -4,7 +4,8 @@ class Artistes {
   final String nom;          
   final String dateNaissance; 
   final String? dateDeces;    
-  final String styleArt;      
+  final String styleArt;
+  bool isFavorite;      
 
   Artistes({
     this.id,
@@ -13,6 +14,7 @@ class Artistes {
     required this.dateNaissance,
     this.dateDeces,
     required this.styleArt,
+    this.isFavorite = false,
   });
 
   factory Artistes.fromMap(Map<String, dynamic> map) {

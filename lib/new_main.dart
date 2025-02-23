@@ -1,15 +1,11 @@
 import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'pages/oeuvres_page.dart';
 import 'pages/favoris_page.dart';
 import 'pages/artistes_page.dart';
 import 'pages/musees_page.dart';
-import 'package:path/path.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
 import 'package:appli_tp1/bdd_Init.dart';
 
 void main() async {

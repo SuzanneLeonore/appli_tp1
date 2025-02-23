@@ -42,27 +42,38 @@ class _MuseesPageState extends State<MuseesPage> {
             itemBuilder: (context, index) {
               final musee = musees[index];
               return Card(
-                margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                child: ListTile(
-                  contentPadding: const EdgeInsets.all(10),
-                  leading: CircleAvatar(
-                    backgroundImage: NetworkImage(musee.logo), 
-                    radius: 30,
-                  ),
-                  title: Text(musee.nom, style: const TextStyle(fontWeight: FontWeight.bold)),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Date de création : ${musee.dateCreation}', 
-                        style: const TextStyle(fontSize: 14),
+                margin: EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    musee.logo.isNotEmpty
+                        ? Image.network(musee.logo, width: 100, height: 100, fit: BoxFit.cover)
+                        : Icon(Icons.image_not_supported, size: 100),  
+                    Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(musee.nom, style: TextStyle(fontWeight: FontWeight.bold)),
+                            SizedBox(height: 4),
+                            Text('Date de création: ${musee.dateCreation}'),
+                            Text('Adresse: ${musee.adresse}'),
+                          ],
+                        ),
                       ),
-                      Text(
-                        'Adresse : ${musee.adresse}', 
-                        style: const TextStyle(fontSize: 14),
+                    ),
+                    IconButton(
+                      icon: Icon(
+                        musee.isFavorite ? Icons.favorite : Icons.favorite_border,
+                        color: musee.isFavorite ? Colors.red : Colors.grey,
                       ),
-                    ],
-                  ),
+                      onPressed: () {
+                        setState(() {
+                          musee.isFavorite = !musee.isFavorite; 
+                        });
+                      },
+                    ),
+                  ]
                 ),
               );
             },
@@ -70,5 +81,8 @@ class _MuseesPageState extends State<MuseesPage> {
         },
       ),
     );
+  }
+  List<Musee> getFavorites(List<Musee> musee) {
+    return musee.where((musee) => musee.isFavorite).toList();
   }
 }
