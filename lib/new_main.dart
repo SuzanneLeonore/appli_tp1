@@ -11,6 +11,7 @@ import 'package:appli_tp1/bdd_Init.dart';
 void main() async {
   print("App démarrée");
   WidgetsFlutterBinding.ensureInitialized(); 
+  DatabaseHelper.instance.deleteDatabase();
   runApp( const MyApp() );
 }
 
@@ -121,7 +122,7 @@ class _HomePageState extends State<HomePage>{
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.brush), label: "Accueil", backgroundColor: Color.fromARGB(255, 2, 65, 116)),
           BottomNavigationBarItem(icon: Icon(Icons.favorite), label: "Favoris", backgroundColor: Color.fromARGB(255, 2, 65, 116)),
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Artistes", backgroundColor: Color.fromARGB(255, 2, 65, 116)),
+          BottomNavigationBarItem(icon: Icon(Icons.star), label: "Artistes", backgroundColor: Color.fromARGB(255, 2, 65, 116)),
           BottomNavigationBarItem(icon: Icon(Icons.museum), label: "Musées", backgroundColor: Color.fromARGB(255, 2, 65, 116)),
         ],
       ),
@@ -143,7 +144,7 @@ class _HomePageState extends State<HomePage>{
               destinations: [
                 NavigationRailDestination(icon: Icon(Icons.brush), label: Text('Accueil')),
                 NavigationRailDestination(icon: Icon(Icons.favorite), label: Text('Favoris')),
-                NavigationRailDestination(icon: Icon(Icons.home), label: Text('Artistes')),
+                NavigationRailDestination(icon: Icon(Icons.star), label: Text('Artistes')),
                 NavigationRailDestination(icon: Icon(Icons.museum), label: Text('Musées')),
               ],
             ),
@@ -174,7 +175,7 @@ class _HomePageState extends State<HomePage>{
               destinations: [
                 NavigationRailDestination(icon: Icon(Icons.brush), label: Text('Accueil')),
                 NavigationRailDestination(icon: Icon(Icons.favorite), label: Text('Favoris')),
-                NavigationRailDestination(icon: Icon(Icons.home), label: Text('Artistes')),
+                NavigationRailDestination(icon: Icon(Icons.star), label: Text('Artistes')),
                 NavigationRailDestination(icon: Icon(Icons.museum), label: Text('Musées')),
               ],
             ),

@@ -36,7 +36,7 @@ class _ArtistesPageState extends State<ArtistesPage> {
           } else if (snapshot.hasError) {
             return Center(child: Text('Erreur : ${snapshot.error}'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('Aucune œuvre trouvée.'));
+            return const Center(child: Text('Aucun artiste trouvé.'));
           }
 
           final artistes = snapshot.data!;
@@ -62,10 +62,9 @@ class _ArtistesPageState extends State<ArtistesPage> {
                           children: [
                             Text(artiste.nom, style: TextStyle(fontWeight: FontWeight.bold)),
                             SizedBox(height: 4),
-                            Text('Nom: ${artiste.nom}'),
                             Text('Date de naissance: ${artiste.dateNaissance}'),
                             Text('Date de Déces: ${artiste.dateDeces} '),
-                            Text('Musée: ${artiste.styleArt}'),
+                            Text('style: ${artiste.styleArt}'),
                           ],
                         ),
                       ),

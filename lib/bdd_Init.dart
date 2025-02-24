@@ -44,16 +44,25 @@ class DatabaseHelper {
       final databasePath = kIsWeb
           ? 'catalogue.db'
           : join(await getDatabasesPath(), 'catalogue.db');
+      
+      final databaseExists = await databaseFactory.databaseExists(databasePath);
 
-      final db = await openDatabase(databasePath, version: 1,
-          onCreate: (db, version) async {
-      });
-      await _loadSqlFromAssetsAndExecute(db);
-      return db;
+      if (!databaseExists) {
+        final db = await openDatabase(databasePath, version: 1,
+            onCreate: (db, version) async {
+          // La création des tables seulement si la base de données est nouvelle
+        });
+        await _loadSqlFromAssetsAndExecute(db);
+        return db;
+      } else {
+        // Si la base existe déjà, on l'ouvre sans la recréer
+        return await openDatabase(databasePath);
+      }
     } catch (e) {
       print("❌ Erreur lors de l'initialisation de la base de données : $e");
       rethrow;
     }
+
   }
 
   Future<void> _loadSqlFromAssetsAndExecute(Database db) async {
@@ -85,6 +94,20 @@ class DatabaseHelper {
       print(
           "❌ Erreur lors du chargement du fichier SQL depuis les assets : $e");
       rethrow;
+    }
+  }
+
+  Future<void> deleteDatabase() async {
+    try {
+      final databasePath = kIsWeb
+          ? 'catalogue.db'
+          : join(await getDatabasesPath(), 'catalogue.db');
+
+      // Supprimer la base de données existante
+      await databaseFactory.deleteDatabase(databasePath);
+      print("✅ Base de données supprimée avec succès.");
+    } catch (e) {
+      print("❌ Erreur lors de la suppression de la base de données : $e");
     }
   }
 

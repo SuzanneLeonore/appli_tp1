@@ -11,12 +11,15 @@ class MuseesPage extends StatefulWidget {
 
 class _MuseesPageState extends State<MuseesPage> {
   late Future<List<Musee>> _musees;
-  final DatabaseHelper _databaseHelper = DatabaseHelper.instance;
 
   @override
   void initState() {
     super.initState();
-    _musees = _databaseHelper.getMusees(); 
+    _musees = DatabaseHelper.instance.getMusees(); 
+    _musees.then((musee) {
+    }).catchError((e) {
+      print("Erreur lors de la récupération des œuvres: $e");
+    });
   }
 
   @override
