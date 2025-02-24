@@ -43,7 +43,21 @@ class _OeuvrePageState extends State<OeuvrePage> {
           return ListView.builder(
             itemCount: oeuvres.length,
             itemBuilder: (context, index) {
-              final oeuvre = oeuvres[index];  
+              final oeuvre = oeuvres[index]; 
+              /*
+              print('URL de l\'image : ${oeuvre.photo}');
+              String photoUrl = oeuvre.photo;
+              try {
+                final Uri uri = Uri.parse(photoUrl);
+                if (uri.hasScheme && (uri.scheme == 'http' || uri.scheme == 'https')) {
+                  print('URL valide : $photoUrl');
+                } else {
+                  print('URL invalide : $photoUrl');
+                }
+              } catch (e) {
+                print('Erreur lors du parsing de l\'URL : $photoUrl');
+              }
+              String encodedUrl = Uri.encodeFull(photoUrl);*/
               return Card(
                 margin: EdgeInsets.all(8.0),
                 child: Row(

@@ -118,8 +118,8 @@ class DatabaseHelper {
     List<Oeuvre> oeuvres = data
         .map(
           (e) => Oeuvre(
-            photo: e["image"] as String? ?? "image de l'oeuvre",
-            nom: e["titre"] as String? ?? "val par défault",
+            photo: e["photo"] as String? ?? "image de l'oeuvre",
+            nom: e["nom"] as String? ?? "val par défault",
             dateCreation: e["date_creation"] as String? ?? "val par default",
             auteur: e["auteur"] as String? ?? "val par default",
             musee: e["musee"] as String? ?? "val par default",

@@ -20,8 +20,8 @@ CREATE TABLE IF NOT EXISTS oeuvres (
     nom TEXT NOT NULL,
     photo TEXT,
     date_creation TEXT,
-    nom_auteur TEXT,
-    nom_musee TEXT
+    auteur TEXT,
+    musee TEXT
 );
 
 
@@ -108,7 +108,7 @@ INSERT INTO musees (nom,logo, date_creation, adresse) VALUES
 ('National Museum of Western Art','https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Nmwa_logo.svg/390px-Nmwa_logo.svg.png', '1959-03-29', '7-7 Ueno Park, Taito City, Tokyo 110-0007, Japan');
 
 
-INSERT INTO oeuvres (nom, photo, date_creation, nom_auteur, nom_musee) VALUES
+INSERT INTO oeuvres (nom, photo, date_creation, auteur, musee) VALUES
 ('La Joconde','https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/405px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg','1503-10-01', 'Léonard de Vinci', 'Louvre'),
 ('La Nuit étoilée','https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/390px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg', '1889-06-01', 'Vincent van Gogh', 'Museum of Modern Art'),
 ('Guernica','https://upload.wikimedia.org/wikipedia/en/7/74/PicassoGuernica.jpg', '1937-04-01', 'Pablo Picasso', 'Museo Reina Sofía'),
@@ -140,4 +140,4 @@ INSERT INTO oeuvres (nom, photo, date_creation, nom_auteur, nom_musee) VALUES
 ('La Petite Danseuse de quatorze ans','https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Danseuse2_degas_Musee_Orsay.jpg/390px-Danseuse2_degas_Musee_Orsay.jpg', '1880', 'Edgar Degas', 'National Gallery of Art'),
 ('Le Peintre et son modèle','https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Henri_Rousseau_-_Le_Pentre_et_son_mod%C3%A8le.jpg/390px-Henri_Rousseau_-_Le_Pentre_et_son_mod%C3%A8le.jpg', '1890-01-01', 'Pierre-Auguste Renoir', 'Musée d''Orsay'),
 ('La Grande Vague de Kanagawa','https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Tsunami_by_hokusai_19th_century.jpg/390px-Tsunami_by_hokusai_19th_century.jpg', '1830', 'Hokusai', 'Metropolitan Museum of Art'),
-('La Jeune Fille à la perle', 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/1665_Girl_with_a_Pearl_Earring.jpg/390px-1665_Girl_with_a_Pearl_Earring.jpg','1665-01-01', 'Johannes Vermeer', 'Mauritshuis'),
+('La Jeune Fille à la perle', 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/1665_Girl_with_a_Pearl_Earring.jpg/390px-1665_Girl_with_a_Pearl_Earring.jpg','1665-01-01', 'Johannes Vermeer', 'Mauritshuis');
