@@ -15,11 +15,15 @@ class _MuseesPageState extends State<MuseesPage> {
   @override
   void initState() {
     super.initState();
-    _musees = DatabaseHelper.instance.getMusees(); 
-    _musees.then((musee) {
-    }).catchError((e) {
-      print("Erreur lors de la récupération des œuvres: $e");
-    });
+    _musees = _loadMusee();
+  }
+
+  Future<List<Musee>> _loadMusee() async {
+    final musees = await DatabaseHelper.instance.getMusees();
+    for (var musee in musees) {
+      await musee.loadFavoriteState();  
+    }
+    return musees;
   }
 
   @override
@@ -73,6 +77,7 @@ class _MuseesPageState extends State<MuseesPage> {
                       onPressed: () {
                         setState(() {
                           musee.isFavorite = !musee.isFavorite; 
+                          musee.saveFavoriteState();
                         });
                       },
                     ),

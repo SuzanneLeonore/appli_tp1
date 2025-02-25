@@ -15,11 +15,15 @@ class _ArtistesPageState extends State<ArtistesPage> {
   @override
   void initState() {
     super.initState();
-    _artistes = DatabaseHelper.instance.getArtistes(); 
-    _artistes.then((artistes) {
-    }).catchError((e) {
-      print("Erreur lors de la récupération des œuvres: $e");
-    });
+    _artistes = _loadArtiste();
+  }
+
+  Future<List<Artistes>> _loadArtiste() async {
+    final artistes = await DatabaseHelper.instance.getArtistes();
+    for (var artiste in artistes) {
+      await artiste.loadFavoriteState();  
+    }
+    return artistes;
   }
 
   @override
@@ -77,6 +81,7 @@ class _ArtistesPageState extends State<ArtistesPage> {
                       onPressed: () {
                         setState(() {
                           artiste.isFavorite = !artiste.isFavorite;
+                          artiste.saveFavoriteState();
                         });
                       },
                     ),

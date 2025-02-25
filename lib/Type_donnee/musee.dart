@@ -1,4 +1,7 @@
+import 'package:shared_preferences/shared_preferences.dart';
+
 class Musee {
+  final int? id;
   final String logo;      
   final String nom;       
   final String dateCreation; 
@@ -6,6 +9,7 @@ class Musee {
   bool isFavorite;   
   
   Musee({
+    this.id,
     required this.logo,
     required this.nom,
     required this.dateCreation,
@@ -30,5 +34,15 @@ class Musee {
       'dateCreation': dateCreation,
       'adresse': adresse,
     };
+  }
+
+  Future<void> saveFavoriteState() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setBool(nom, isFavorite);  // Utilise le nom du produit comme clé
+  }
+
+  Future<void> loadFavoriteState() async {
+    final prefs = await SharedPreferences.getInstance();
+    isFavorite = prefs.getBool(nom) ?? false;  // Par défaut, false si rien n'est sauvegardé
   }
 }

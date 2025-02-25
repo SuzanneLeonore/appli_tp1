@@ -15,11 +15,15 @@ class _OeuvrePageState extends State<OeuvrePage> {
   @override
   void initState() {
     super.initState();
-    _oeuvres = DatabaseHelper.instance.getOeuvres();
-    _oeuvres.then((oeuvres) {
-    }).catchError((e) {
-      print("Erreur lors de la récupération des œuvres: $e");
-    });
+    _oeuvres = _loadOeuvres();
+  }
+
+  Future<List<Oeuvre>> _loadOeuvres() async {
+    final oeuvres = await DatabaseHelper.instance.getOeuvres();
+    for (var oeuvre in oeuvres) {
+      await oeuvre.loadFavoriteState();  
+    }
+    return oeuvres;
   }
 
   @override
@@ -44,20 +48,6 @@ class _OeuvrePageState extends State<OeuvrePage> {
             itemCount: oeuvres.length,
             itemBuilder: (context, index) {
               final oeuvre = oeuvres[index]; 
-              /*
-              print('URL de l\'image : ${oeuvre.photo}');
-              String photoUrl = oeuvre.photo;
-              try {
-                final Uri uri = Uri.parse(photoUrl);
-                if (uri.hasScheme && (uri.scheme == 'http' || uri.scheme == 'https')) {
-                  print('URL valide : $photoUrl');
-                } else {
-                  print('URL invalide : $photoUrl');
-                }
-              } catch (e) {
-                print('Erreur lors du parsing de l\'URL : $photoUrl');
-              }
-              String encodedUrl = Uri.encodeFull(photoUrl);*/
               return Card(
                 margin: EdgeInsets.all(8.0),
                 child: Row(
@@ -88,10 +78,11 @@ class _OeuvrePageState extends State<OeuvrePage> {
                         oeuvre.isFavorite ? Icons.favorite : Icons.favorite_border,
                         color: oeuvre.isFavorite ? Colors.red : Colors.grey,
                       ),
-                      onPressed: () {
+                      onPressed: () async{
                         setState(() {
                           oeuvre.isFavorite = !oeuvre.isFavorite; 
                         });
+                        await oeuvre.saveFavoriteState();
                       },
                     ),
                   ],

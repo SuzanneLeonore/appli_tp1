@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS musees (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     logo TEXT,
     nom TEXT NOT NULL,
-    date_creation TEXT,
+    dateCreation TEXT,
     adresse TEXT
 );
 
@@ -33,7 +33,7 @@ INSERT INTO artistes (nom, photo, dateNaissance, dateDeces, styleArt) VALUES
 ('Leonardo da Vinci', 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Francesco_Melzi_-_Portrait_of_Leonardo.png/390px-Francesco_Melzi_-_Portrait_of_Leonardo.png', '1452-04-15', '1519-05-02', 'Renaissance'),
 ('Henri Matisse', 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Portrait_of_Henri_Matisse_1933_May_20.jpg/390px-Portrait_of_Henri_Matisse_1933_May_20.jpg', '1869-12-31', '1954-11-03', 'Fauvisme'),
 ('Georgia O''Keeffe', 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/O%27Keeffe-%28hands%29.jpg/390px-O%27Keeffe-%28hands%29.jpg', '1887-11-15', '1986-03-06', 'Modernisme'),
-('Michel-Ange','https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/O%27Keeffe-%28hands%29.jpg/390px-O%27Keeffe-%28hands%29.jpg','1475-03-06','1564-02-18', 'Renaissance, Maniérisme'),
+('Michel-Ange','https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Michelangelo_Daniele_da_Volterra_%28dettaglio%29.jpg/390px-Michelangelo_Daniele_da_Volterra_%28dettaglio%29.jpg','1475-03-06','1564-02-18', 'Renaissance, Maniérisme'),
 ('Raphaël','https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Raffaello_Sanzio.jpg/390px-Raffaello_Sanzio.jpg','1483-04-06','1520-04-06','Renaissance'),
 ('Édvard Munch','https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Edvard_Munch_1933-2.jpg/390px-Edvard_Munch_1933-2.jpg','1863-12-12','1944-01-23','Expressionnisme'),
 ('Gustav Klimt','https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Klimt.jpg/390px-Klimt.jpg','1862-07-14','1918-02-06','Art Nouveau, Symbolisme'),
@@ -67,44 +67,32 @@ INSERT INTO artistes (nom, photo, dateNaissance, dateDeces, styleArt) VALUES
 ('Pierre Soulages','https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/655446-artiste-pierre-soulages_%28cropped%29.jpg/390px-655446-artiste-pierre-soulages_%28cropped%29.jpg', '1919-12-24', '2022-10-26', 'Abstraction, Art informel'),
 ('Maurits Cornelis Escher','https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Maurits_Cornelis_Escher.jpg/330px-Maurits_Cornelis_Escher.jpg', '1898-06-17', '1972-03-27', 'Art géométrique, Art optique');
 
-INSERT INTO musees (nom,logo, date_creation, adresse) VALUES
+INSERT INTO musees (nom,logo, dateCreation, adresse) VALUES
 ('Louvre','https://upload.wikimedia.org/wikipedia/fr/thumb/9/9f/Musee_du_Louvre_1992_logo.png/270px-Musee_du_Louvre_1992_logo.png', '1793-08-10', 'Rue de Rivoli, 75001 Paris, France'),
 ('Musée d''Orsay','https://upload.wikimedia.org/wikipedia/fr/thumb/7/73/Logo_mus%C3%A9e_d%27Orsay.png/240px-Logo_mus%C3%A9e_d%27Orsay.png', '1986-12-01', '1 Rue de la Légion d''Honneur, 75007 Paris, France'),
 ('Vatican Museums','https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Musei_vaticani_Coat_of_Arms.svg/langfr-195px-Musei_vaticani_Coat_of_Arms.svg.png', '1506-08-15', 'Vatican City, 00120 Vatican'),
 ('British Museum','https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/British_Museum_logo.svg/langfr-195px-British_Museum_logo.svg.png', '1753-06-07', 'Great Russell St, Bloomsbury, London WC1B 3DG, United Kingdom'),
 ('The Metropolitan Museum of Art','https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/The_Metropolitan_Museum_of_Art_Logo.svg/langfr-195px-The_Metropolitan_Museum_of_Art_Logo.svg.png', '1870-04-13', '1000 Fifth Avenue, New York, NY 10028, USA'),
-('Tate Modern','pas de logo', '2000-05-12', 'Bankside, London SE1 9TG, United Kingdom'),
 ('Prado Museum','https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Logo_del_Museo_Nacional_del_Prado.png/195px-Logo_del_Museo_Nacional_del_Prado.png', '1819-11-19', 'Calle de Felipe IV, s/n, 28014 Madrid, Spain'),
 ('Hermitage Museum','https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Hermitage_logo.svg/langfr-300px-Hermitage_logo.svg.png', '1764-12-07', 'Palace Square, 2, St. Petersburg, Russia'),
-('Uffizi Gallery','pas de logo', '1584-06-12', 'Piazzale degli Uffizi, 6, 50122 Firenze FI, Italy'),
 ('Rijksmuseum','https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Logo_Rijksmuseum.svg/langfr-300px-Logo_Rijksmuseum.svg.png', '1800-11-19', 'Museumstraat 1, 1071 XX Amsterdam, Netherlands'),
 ('Guggenheim Museum','https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Guggenheim_Museum_Logo.svg/langfr-225px-Guggenheim_Museum_Logo.svg.png', '1937-10-21', '1071 Fifth Avenue, New York, NY 10128, USA'),
 ('Museum of Modern Art (MoMA)','https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Museum_of_Modern_Art_logo.svg/langfr-195px-Museum_of_Modern_Art_logo.svg.png', '1929-11-07', '11 W 53rd St, New York, NY 10019, USA'),
-('Museo Nacional de Antropología','pas de logo', '1823-09-17', 'Av. Paseo de la Reforma 679, Chapultepec, 11560 Ciudad de México, Mexico'),
 ('National Gallery','https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/National_Gallery_London_logo.svg/langfr-195px-National_Gallery_London_logo.svg.png', '1824-05-10', 'Trafalgar Square, London WC2N 5DN, United Kingdom'),
 ('The Art Institute of Chicago','https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Art_Institute_of_Chicago_Logo.png/195px-Art_Institute_of_Chicago_Logo.png', '1879-12-01', '111 S Michigan Ave, Chicago, IL 60603, USA'),
-('Museo Nacional de Bellas Artes','pas de logo', '1895-10-13', 'Av. Del Libertador 1473, CABA, Buenos Aires, Argentina'),
 ('Van Gogh Museum','https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Logo_-_Van_Gogh_Museum.png/195px-Logo_-_Van_Gogh_Museum.png', '1973-06-02', 'Paulus Potterstraat 7, 1071 CX Amsterdam, Netherlands'),
 ('Centre Pompidou','https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Le_logo_du_Centre_Pompidou_redessin%C3%A9_en_2019_%285_bandes%29_avec_son_typogramme.svg/langfr-600px-Le_logo_du_Centre_Pompidou_redessin%C3%A9_en_2019_%285_bandes%29_avec_son_typogramme.svg.png', '1977-01-31', 'Place Georges-Pompidou, 75004 Paris, France'),
-('National Museum of China','pas de logo', '2003-03-18', '1 Chang''an Avenue, Beijing, China'),
 ('Museo Guggenheim Bilbao','https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Guggenheim_Museum_Bilbao_logo.svg/langfr-195px-Guggenheim_Museum_Bilbao_logo.svg.png', '1997-10-18', 'Abandoibarra Etorb., 2, 48001 Bilbao, Spain'),
 ('Acropolis Museum','https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Acropolis_Museum_Logo_%282011%29.svg/langfr-195px-Acropolis_Museum_Logo_%282011%29.svg.png', '2009-06-20', 'Dionysiou Areopagitou 15, Athina 117 42, Greece'),
 ('Musée de l''Orangerie','https://upload.wikimedia.org/wikipedia/fr/thumb/0/04/Mus%C3%A9edel%27orangerielogo.jpg/195px-Mus%C3%A9edel%27orangerielogo.jpg', '1852-05-28', 'Jardin Tuileries, 75001 Paris, France'),
-('The National Gallery of Art','pas de logo', '1937-03-17', '6th St & Constitution Ave NW, Washington, D.C., 20565, USA'),
 ('Museum of Fine Arts, Boston','https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Museum_of_Fine_Arts%2C_Boston_Logo_2022.png/330px-Museum_of_Fine_Arts%2C_Boston_Logo_2022.png', '1870-07-04', '465 Huntington Ave, Boston, MA 02115, USA'),
-('Altes Museum','pas de logo', '1830-10-01', 'Am Lustgarten, 10178 Berlin, Germany'),
-('Musée Rodin', 'pas de logo','1919-11-31', '77 Rue de Varennes, 75007 Paris, France'),
 ('Los Angeles County Museum of Art (LACMA)','https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/LACMA_logo.svg/330px-LACMA_logo.svg.png', '1961-04-10', '5905 Wilshire Blvd, Los Angeles, CA 90036, USA'),
 ('National Portrait Gallery','https://upload.wikimedia.org/wikipedia/en/thumb/2/25/National_Portrait_Gallery_Logo.jpg/150px-National_Portrait_Gallery_Logo.jpg', '1856-02-01', 'St Martin''s Place, London WC2H 0HE, United Kingdom'),
 ('Museo del Prado','https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Logo_del_Museo_Nacional_del_Prado.png/405px-Logo_del_Museo_Nacional_del_Prado.png', '1819-11-19', 'Calle de Felipe IV, s/n, 28014 Madrid, Spain'),
 ('The Egyptian Museum','https://upload.wikimedia.org/wikipedia/en/thumb/3/3b/Egyptian_Museum_logo.png/330px-Egyptian_Museum_logo.png', '1855-11-15', 'Tahrir Square, Cairo, Egypt'),
 ('Smithsonian American Art Museum','https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Smithsonian_logo_color.svg/270px-Smithsonian_logo_color.svg.png','1829-01-01', '8th and F Streets NW, Washington, D.C., 20560, USA'),
 ('Kunsthistorisches Museum','https://upload.wikimedia.org/wikipedia/en/thumb/a/a3/Kunsthistorisches_Museum_logo.svg/330px-Kunsthistorisches_Museum_logo.svg.png', '1891-10-18', 'Maria-Theresien-Platz, 1010 Wien, Austria'),
-('Neue Nationalgalerie','pas de logo', '1968-09-15', 'Potsdamer Str. 50, 10785 Berlin, Germany'),
-('Museum of the History of Science','pas de logo', '1683-12-02', 'Broad Street, Oxford OX1 3AZ, UK'),
 ('The Museum of Contemporary Art','https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/MOCA_wordmark.svg/330px-MOCA_wordmark.svg.png', '1986-02-27', '250 S Grand Ave, Los Angeles, CA 90012, USA'),
-('Musée des Beaux-Arts de Montréal','pas de logo','1860-11-09', '1380 Sherbrooke St W, Montreal, QC H3G 1J5, Canada'),
-('The State Tretyakov Gallery','pas de logo', '1856-08-22', 'Lavrushinsky Ln, 10, Moscow, Russia'),
 ('National Museum of Western Art','https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Nmwa_logo.svg/390px-Nmwa_logo.svg.png', '1959-03-29', '7-7 Ueno Park, Taito City, Tokyo 110-0007, Japan');
 
 

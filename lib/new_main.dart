@@ -8,6 +8,7 @@ import 'pages/artistes_page.dart';
 import 'pages/musees_page.dart';
 import 'package:appli_tp1/bdd_Init.dart';
 
+
 void main() async {
   print("App démarrée");
   WidgetsFlutterBinding.ensureInitialized(); 

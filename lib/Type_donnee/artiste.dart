@@ -1,3 +1,5 @@
+import 'package:shared_preferences/shared_preferences.dart';
+
 class Artistes {
   final int? id;
   final String photo;        
@@ -38,6 +40,16 @@ class Artistes {
       'dateDeces': dateDeces,
       'styleArt': styleArt,
     };
+  }
+
+  Future<void> saveFavoriteState() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setBool(nom, isFavorite);  // Utilise le nom du produit comme clé
+  }
+
+  Future<void> loadFavoriteState() async {
+    final prefs = await SharedPreferences.getInstance();
+    isFavorite = prefs.getBool(nom) ?? false;  // Par défaut, false si rien n'est sauvegardé
   }
 
   @override
